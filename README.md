@@ -208,9 +208,9 @@ Durante o desenvolvimento foram aplicados conhecimentos de:
 
 ## Autores
 
-**Igor da Silva Azeredo**
-**Angel Daumas pereira Lopez**
-**Thyéz de Oliveira**
+**Igor da Silva Azeredo**, 
+**Angel Daumas pereira Lopez,**
+**Thyéz de Oliveira Monteiro**
 
 Projeto desenvolvido para fins educacionais.
 
