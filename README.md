@@ -79,14 +79,12 @@ Criar um ambiente virtual:
 
 ```bash
 pip install uv
-
-uv init
 ```
 
 Instalar as dependências:
 
 ```bash
-uv add -r requirements.txt
+uv sync
 ```
 
 ---
