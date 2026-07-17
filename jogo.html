@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Jogo da Memória - Combate à Dengue</title>
+
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+
+    <div id="game">
+        <div class="top">
+            <span id="player"></span>
+            <span>Tempo: <span id="t">00:00</span></span>
+            <span>Pontos: <span id="p">0</span></span>
+            <span>Mov.: <span id="m">0</span></span>
+        </div>
+
+        <div id="board"></div>
+    </div>
+
+    <div id="win" style="display:none">
+        <h1>🎉 Parabéns!</h1>
+        <p id="res"></p>
+
+      <button onclick="location.href='index.html'">
+    Voltar ao Menu
+</button>
+
+    </div>
+    <div id="ranking">
+    <h2>🏆 Ranking</h2>
+    <ul id="lista-ranking"></ul>
+</div>
+
+<div id="alerta" class="alerta">
+    <div class="caixa-alerta">
+        <h2 id="titulo-alerta">🦟 Dica!</h2>
+        <p id="mensagem-alerta"></p>
+        <button onclick="fecharAlerta()">Entendi 😊</button>
+    </div>
+</div>
+
+<script src="js/script.js"></script>
+
+</body>
+
+</html>

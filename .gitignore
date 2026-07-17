@@ -1,0 +1,46 @@
+# Ambiente virtual
+.venv/
+venv/
+env/
+
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+
+# Banco SQLite (caso exista)
+db.sqlite3
+
+# Arquivos de ambiente
+.env
+
+# VS Code
+.vscode/
+
+# PyCharm
+.idea/
+
+# Arquivos do sistema
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# Cache do pytest
+.pytest_cache/
+
+# Cache do mypy
+.mypy_cache/
+
+# Arquivos compilados
+*.egg-info/
+build/
+dist/
+
+# Arquivos estáticos coletados (caso use collectstatic)
+staticfiles/
+
+# Cobertura de testes
+.coverage
+htmlcov/
