@@ -117,10 +117,17 @@ DB_USER="meuusuario"
 DB_PASSWORD="minhasenha"
 DB_HOST="localhost"
 ```
+
+Inicie a pasta estatica
+
+```bash
+uv run python3 manage.py collectstatic --noinput
+```
+
 E inicie o servidor
 
 ```bash
-uv run python manage.py runserver
+uv run granian --interface wsgi config.wsgi:application --port 8000
 ```
 
 O sistema estará disponível em:
