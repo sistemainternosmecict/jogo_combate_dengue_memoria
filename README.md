@@ -103,7 +103,7 @@ settings.py
 Executar as migrações:
 
 ```bash
-python manage.py migrate
+uv run python manage.py migrate
 ```
 
 ---
@@ -122,7 +122,7 @@ DB_HOST="localhost"
 E inicie o servidor
 
 ```bash
-python manage.py runserver
+uv run python manage.py runserver
 ```
 
 O sistema estará disponível em:
