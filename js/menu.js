@@ -9,6 +9,6 @@ function jogar() {
 
     localStorage.setItem("nomeJogador", nome);
 
-    window.location.href = "jogo.html";
+    window.location.href = "/jogo/";
 
 }

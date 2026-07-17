@@ -63,34 +63,12 @@ Durante o jogo, o usuário deve encontrar pares de cartas relacionadas ao combat
 
 ---
 
-## Estrutura do Projeto
-
-```
-jogo_memoria/
-│
-├── frontend/
-│   ├── index.html
-│   ├── style.css
-│   └── script.js
-│
-├── backend/
-│   ├── ranking/
-│   ├── config/
-│   └── manage.py
-│
-└── README.md
-```
-
-*(A estrutura pode ser ajustada conforme a organização final dos arquivos.)*
-
----
-
 ##  Como Executar o Projeto
 
 ### 1. Clonar o repositório
 
 ```bash
-git clone https://github.com/IgorAzeredo/Jogos.git
+git clone https://github.com/sistemainternosmecict/jogo_combate_dengue_memoria.git
 ```
 
 ---
@@ -100,33 +78,22 @@ git clone https://github.com/IgorAzeredo/Jogos.git
 Criar um ambiente virtual:
 
 ```bash
-python -m venv .venv
-```
+pip install uv
 
-Ativar o ambiente:
-
-Windows:
-
-```bash
-.venv\Scripts\activate
+uv init
 ```
 
 Instalar as dependências:
 
 ```bash
-pip install -r requirements.txt
+uv add -r requirements.txt
 ```
 
 ---
 
 ### 3. Configurar o banco de dados
 
-Criar o banco PostgreSQL:
-
-```
-jogo_memoria
-```
-
+Criar o banco PostgreSQL local e
 Configurar as informações no arquivo:
 
 ```
@@ -142,6 +109,17 @@ python manage.py migrate
 ---
 
 ### 4. Iniciar o servidor Django
+
+Antes de rodar configure um arquivo .env na raiz do projeto para configurar as variaveis de ambiente usadas pelo servidor seguindo o seguinte modelo:
+
+```env
+DJANGO_SECRET=1234
+DB_NAME="meudb"
+DB_USER="meuusuario"
+DB_PASSWORD="minhasenha"
+DB_HOST="localhost"
+```
+E inicie o servidor
 
 ```bash
 python manage.py runserver
@@ -181,12 +159,12 @@ O jogador inicia informando seu nome e recebe um conjunto de cartas viradas.
 
 Cada carta representa um elemento relacionado à dengue, como:
 
-🦟 Mosquito Aedes aegypti  
-🚰 Caixa d'água  
-🛞 Pneus acumulando água  
-🪣 Baldes  
-🗑️ Lixo acumulado  
-💧 Água parada  
+🦟 Mosquito Aedes aegypti
+🚰 Caixa d'água
+🛞 Pneus acumulando água
+🪣 Baldes
+🗑️ Lixo acumulado
+💧 Água parada
 
 O objetivo é encontrar todos os pares no menor tempo e com o menor número de movimentos possível.
 
@@ -208,7 +186,7 @@ Durante o desenvolvimento foram aplicados conhecimentos de:
 
 ## Autores
 
-**Igor da Silva Azeredo**, 
+**Igor da Silva Azeredo**,
 **Angel Daumas pereira Lopez,**
 **Thyéz de Oliveira Monteiro**
 
