@@ -5,6 +5,7 @@ class Ranking(models.Model):
     pontos = models.IntegerField()
     tempo = models.IntegerField()
     movimentos = models.IntegerField()
+    pares = models.IntegerField(default=15)
     criado_em = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):

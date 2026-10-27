@@ -23,7 +23,8 @@ def listar_ranking(request):
             "nome": jogador.nome,
             "pontos": jogador.pontos,
             "tempo": jogador.tempo,
-            "movimentos": jogador.movimentos
+            "movimentos": jogador.movimentos,
+            "pares": jogador.pares
         })
 
     return Response(dados)    

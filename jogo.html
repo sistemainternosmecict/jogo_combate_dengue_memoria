@@ -18,6 +18,7 @@
             <span>Tempo: <span id="t">00:00</span></span>
             <span>Pontos: <span id="p">0</span></span>
             <span>Mov.: <span id="m">0</span></span>
+            <button id="btn-sair" class="btn-sair" onclick="confirmarSaida()">🚪 Sair</button>
         </div>
 
         <div id="board"></div>
@@ -27,23 +28,71 @@
         <h1>🎉 Parabéns!</h1>
         <p id="res"></p>
 
-      <button onclick="location.href='index.html'">
-    Voltar ao Menu
-</button>
-
+        <div class="botoes-vitoria">
+            <button onclick="jogarNovamente()">
+                🔄 Jogar Novamente
+            </button>
+            <button class="btn-secundario" onclick="location.href='/'">
+                🏠 Voltar ao Menu
+            </button>
+        </div>
     </div>
+
     <div id="ranking">
-    <h2>🏆 Ranking</h2>
-    <ul id="lista-ranking"></ul>
-</div>
-
-<div id="alerta" class="alerta">
-    <div class="caixa-alerta">
-        <h2 id="titulo-alerta">🦟 Dica!</h2>
-        <p id="mensagem-alerta"></p>
-        <button onclick="fecharAlerta()">Entendi 😊</button>
+        <h2>🏆 Ranking</h2>
+        <ul id="lista-ranking"></ul>
     </div>
-</div>
+
+    <!-- Modal de Configuração de Dificuldade -->
+    <div id="modal-dificuldade" class="alerta" style="display:flex">
+        <div class="caixa-alerta caixa-dificuldade">
+            <h2>⚙️ Configurar Dificuldade</h2>
+            <p>Defina a quantidade de pares para iniciar:</p>
+
+            <div class="info-dificuldade">
+                <span id="valor-pares">8</span> Pares (<span id="valor-cartas">16</span> cartas)
+            </div>
+
+            <div class="slider-container">
+                <input
+                    type="range"
+                    id="slider-pares"
+                    min="2"
+                    max="15"
+                    value="8"
+                    oninput="atualizarSlider(this.value)"
+                >
+                <div class="limites-slider">
+                    <span>Mín: 2 pares</span>
+                    <span>Máx: 15 pares</span>
+                </div>
+            </div>
+
+            <div class="botoes-modal">
+                <button onclick="iniciarJogo()">▶ Iniciar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de Confirmação para Sair -->
+    <div id="modal-sair" class="alerta">
+        <div class="caixa-alerta">
+            <h2>⚠️ Sair do Jogo?</h2>
+            <p>Tem certeza que deseja abandonar a partida e voltar para a tela inicial?</p>
+            <div class="botoes-modal">
+                <button class="btn-confirmar-saida" onclick="sairParaMenu()">Sim, sair</button>
+                <button onclick="fecharModalSair()">Continuar jogando</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="alerta" class="alerta">
+        <div class="caixa-alerta">
+            <h2 id="titulo-alerta">🦟 Dica!</h2>
+            <p id="mensagem-alerta"></p>
+            <button onclick="fecharAlerta()">Entendi 😊</button>
+        </div>
+    </div>
 
 <script src="{% static 'script.js' %}"></script>
 

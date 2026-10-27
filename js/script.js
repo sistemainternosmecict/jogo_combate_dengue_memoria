@@ -36,7 +36,8 @@ const mensagens = {
     "✅": "A prevenção é a melhor forma de combater a dengue."
 };
 
-let deck = [...icons, ...icons].sort(() => Math.random() - 0.5);
+let totalPairs = 8;
+let deck = [];
 
 let first = null;
 let lock = false;
@@ -44,60 +45,165 @@ let mov = 0;
 let pts = 0;
 let pairs = 0;
 let sec = 0;
-let intv;
+let intv = null;
+let jogoAtivo = false;
 
-function start() {
+function atualizarSlider(valor) {
+    totalPairs = parseInt(valor, 10);
+    document.getElementById("valor-pares").textContent = totalPairs;
+    document.getElementById("valor-cartas").textContent = totalPairs * 2;
+}
 
+function configurarTamanhoTabuleiro(numPares) {
+    let cols = 6;
+    let size = 100;
+    let fontSize = 45;
+
+    if (numPares === 2) {
+        cols = 2;
+        size = 150;
+        fontSize = 65;
+    } else if (numPares === 3) {
+        cols = 3;
+        size = 140;
+        fontSize = 60;
+    } else if (numPares === 4) {
+        cols = 4;
+        size = 130;
+        fontSize = 55;
+    } else if (numPares <= 6) {
+        cols = 4;
+        size = 115;
+        fontSize = 50;
+    } else if (numPares <= 8) {
+        cols = 4;
+        size = 105;
+        fontSize = 45;
+    } else if (numPares <= 10) {
+        cols = 5;
+        size = 95;
+        fontSize = 40;
+    } else if (numPares <= 12) {
+        cols = 6;
+        size = 90;
+        fontSize = 38;
+    } else {
+        cols = 6;
+        size = 82;
+        fontSize = 35;
+    }
+
+    // Ajuste responsivo caso a tela seja menor
+    const larguraDisponivel = window.innerWidth - 40;
+    if (window.innerWidth <= 600) {
+        cols = Math.min(cols, numPares === 2 ? 2 : numPares === 3 ? 3 : 4);
+    } else if (window.innerWidth <= 900) {
+        cols = Math.min(cols, 5);
+    }
+
+    const gap = window.innerWidth <= 600 ? 10 : 15;
+    const maxCardWidth = Math.floor((larguraDisponivel - (cols - 1) * gap) / cols);
+    if (maxCardWidth < size) {
+        size = Math.max(55, maxCardWidth);
+        fontSize = Math.max(24, Math.round(size * 0.44));
+    }
+
+    board.style.setProperty("--grid-cols", cols);
+    board.style.setProperty("--card-size", `${size}px`);
+    board.style.setProperty("--card-font-size", `${fontSize}px`);
+}
+
+function prepararTelaJogo() {
     const nome = localStorage.getItem("nomeJogador") || "Jogador";
+    player.textContent = "👤 " + nome;
 
+    clearInterval(intv);
+    jogoAtivo = false;
+    sec = 0;
+    mov = 0;
+    pts = 0;
+    pairs = 0;
+    first = null;
+    lock = false;
+
+    t.textContent = "00:00";
+    m.textContent = "0";
+    p.textContent = "0";
+
+    // Tabuleiro inicia vazio até definir a dificuldade
+    board.innerHTML = "";
+
+    game.style.display = "block";
+    win.style.display = "none";
+
+    const slider = document.getElementById("slider-pares");
+    if (slider) {
+        atualizarSlider(slider.value);
+    }
+
+    document.getElementById("modal-dificuldade").style.display = "flex";
+}
+
+function iniciarJogo() {
+    const slider = document.getElementById("slider-pares");
+    totalPairs = parseInt(slider.value, 10) || 8;
+
+    document.getElementById("modal-dificuldade").style.display = "none";
+    start(totalPairs);
+}
+
+function start(numPares = totalPairs) {
+    const nome = localStorage.getItem("nomeJogador") || "Jogador";
     player.textContent = "👤 " + nome;
 
     sec = 0;
     mov = 0;
     pts = 0;
     pairs = 0;
+    first = null;
+    lock = false;
+    jogoAtivo = true;
 
     t.textContent = "00:00";
     m.textContent = "0";
     p.textContent = "0";
 
-    deck = [...icons, ...icons].sort(() => Math.random() - 0.5);
+    configurarTamanhoTabuleiro(numPares);
+
+    const iconesSelecionados = [...icons]
+        .sort(() => Math.random() - 0.5)
+        .slice(0, numPares);
+
+    deck = [...iconesSelecionados, ...iconesSelecionados].sort(
+        () => Math.random() - 0.5
+    );
 
     board.innerHTML = "";
 
     clearInterval(intv);
 
     intv = setInterval(() => {
-
         sec++;
 
         const min = String(Math.floor(sec / 60)).padStart(2, "0");
         const seg = String(sec % 60).padStart(2, "0");
 
         t.textContent = `${min}:${seg}`;
-
     }, 1000);
 
     deck.forEach(icon => {
-
         const carta = document.createElement("div");
 
         carta.className = "card";
-
         carta.textContent = "?";
-
         carta.dataset.valor = icon;
-
         carta.onclick = () => flip(carta);
 
         board.appendChild(carta);
-
     });
-
 }
 
 function flip(carta) {
-
     if (lock || carta.classList.contains("done") || carta === first) {
         return;
     }
@@ -115,7 +221,6 @@ function flip(carta) {
     lock = true;
 
     if (first.dataset.valor === carta.dataset.valor) {
-
         first.classList.add("done");
         carta.classList.add("done");
 
@@ -125,41 +230,40 @@ function flip(carta) {
         pairs++;
 
         // Mostra uma dica educativa
-setTimeout(() => {
-    mostrarAlerta(
-        "🦟 Muito bem!",
-        mensagens[carta.dataset.valor]
-    );
-}, 200);
+        setTimeout(() => {
+            mostrarAlerta(
+                "🦟 Muito bem!",
+                mensagens[carta.dataset.valor]
+            );
+        }, 200);
+
         first = null;
         lock = false;
 
-if (pairs === icons.length) {
+        if (pairs === totalPairs) {
+            console.log("Jogador venceu!");
+            jogoAtivo = false;
+            clearInterval(intv);
 
-    console.log("Jogador venceu!");
+            // Envia o resultado para a API
+            salvarRanking();
 
-    clearInterval(intv);
+            game.style.display = "none";
+            win.style.display = "flex";
 
-    // Envia o resultado para a API
-    salvarRanking();
-
-    game.style.display = "none";
-    win.style.display = "flex";
-
-    res.innerHTML = `
-        <strong>Parabéns!</strong><br><br>
-        Tempo: ${t.textContent}<br>
-        Pontos: ${pts}<br>
-        Movimentos: ${mov}
-    `;
-}
+            res.innerHTML = `
+                <strong>Parabéns!</strong><br><br>
+                Dificuldade: ${totalPairs} pares (${totalPairs * 2} cartas)<br>
+                Tempo: ${t.textContent}<br>
+                Pontos: ${pts}<br>
+                Movimentos: ${mov}
+            `;
+        }
     } else {
-
         pts = Math.max(0, pts - 2);
         p.textContent = pts;
 
         setTimeout(() => {
-
             first.textContent = "?";
             carta.textContent = "?";
 
@@ -168,17 +272,33 @@ if (pairs === icons.length) {
 
             first = null;
             lock = false;
-
         }, 800);
     }
 }
-async function salvarRanking() {
 
+function confirmarSaida() {
+    document.getElementById("modal-sair").style.display = "flex";
+}
+
+function fecharModalSair() {
+    document.getElementById("modal-sair").style.display = "none";
+}
+
+function sairParaMenu() {
+    clearInterval(intv);
+    window.location.href = "/";
+}
+
+function jogarNovamente() {
+    prepararTelaJogo();
+}
+
+async function salvarRanking() {
     console.log("Entrou na função salvarRanking");
 
     const nome = localStorage.getItem("nomeJogador") || "Jogador";
     try {
-        const resposta = await fetch("http://127.0.0.1:8000/ranking/", {
+        const resposta = await fetch("/ranking/", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
@@ -187,7 +307,8 @@ async function salvarRanking() {
                 nome: nome,
                 pontos: pts,
                 tempo: sec,
-                movimentos: mov
+                movimentos: mov,
+                pares: totalPairs
             })
         });
 
@@ -195,48 +316,41 @@ async function salvarRanking() {
 
         if (resposta.ok) {
             console.log("Ranking salvo com sucesso!");
+            carregarRanking();
         } else {
             console.error("Erro ao salvar ranking");
         }
-
     } catch (erro) {
         console.error("Erro:", erro);
     }
-}async function carregarRanking(){
-
-    const resposta = await fetch("http://127.0.0.1:8000/ranking/top10/");
-
-    const jogadores = await resposta.json();
-
-    const lista = document.getElementById("lista-ranking");
-
-    lista.innerHTML = "";
-
-    jogadores.forEach((jogador,index)=>{
-
-        lista.innerHTML += `
-        <li>
-            ${index+1}º ${jogador.nome}
-            <br>
-            ⭐ ${jogador.pontos} pontos
-        </li>
-        `;
-
-    });
 }
 
-carregarRanking();
+async function carregarRanking() {
+    try {
+        const resposta = await fetch("/ranking/top10/");
+        if (!resposta.ok) return;
 
-function mostrarAlerta(titulo, mensagem) {
+        const jogadores = await resposta.json();
+        const lista = document.getElementById("lista-ranking");
 
-    document.getElementById("titulo-alerta").textContent = titulo;
-    document.getElementById("mensagem-alerta").textContent = mensagem;
+        lista.innerHTML = "";
 
-    document.getElementById("alerta").style.display = "flex";
+        jogadores.forEach((jogador, index) => {
+            const numPares = jogador.pares || 15;
+            lista.innerHTML += `
+            <li>
+                <strong>${index + 1}º ${jogador.nome}</strong>
+                <br>
+                ⭐ ${jogador.pontos} pts | 🃏 ${numPares} pares
+            </li>
+            `;
+        });
+    } catch (erro) {
+        console.error("Erro ao carregar ranking:", erro);
+    }
 }
 
 function mostrarAlerta(titulo, mensagem) {
-
     lock = true;
 
     document.getElementById("titulo-alerta").textContent = titulo;
@@ -250,13 +364,17 @@ function mostrarAlerta(titulo, mensagem) {
 }
 
 function fecharAlerta() {
-
     document.getElementById("alerta").style.display = "none";
-
     lock = false;
-
 }
 
+window.addEventListener("resize", () => {
+    if (jogoAtivo) {
+        configurarTamanhoTabuleiro(totalPairs);
+    }
+});
+
 window.onload = function () {
-    start();
+    prepararTelaJogo();
+    carregarRanking();
 };
