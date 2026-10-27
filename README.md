@@ -54,7 +54,7 @@ Durante o jogo, o usuário deve encontrar pares de cartas relacionadas ao combat
 
 ### Banco de Dados
 
-- PostgreSQL
+- SQLite3 (`dados_de_jogo.db`)
 
 ### Ferramentas
 
@@ -91,14 +91,9 @@ uv sync
 
 ### 3. Configurar o banco de dados
 
-Criar o banco PostgreSQL local e
-Configurar as informações no arquivo:
+O projeto utiliza SQLite3 (`dados_de_jogo.db`), configurado em `config/settings.py`.
 
-```
-settings.py
-```
-
-Executar as migrações:
+Executar as migrações para criar e atualizar o banco de dados:
 
 ```bash
 uv run python manage.py migrate
@@ -108,14 +103,10 @@ uv run python manage.py migrate
 
 ### 4. Iniciar o servidor Django
 
-Antes de rodar configure um arquivo .env na raiz do projeto para configurar as variaveis de ambiente usadas pelo servidor seguindo o seguinte modelo:
+(Opcional) Configure um arquivo `.env` na raiz do projeto caso deseje sobrescrever a chave secreta do Django:
 
 ```env
-DJANGO_SECRET=1234
-DB_NAME="meudb"
-DB_USER="meuusuario"
-DB_PASSWORD="minhasenha"
-DB_HOST="localhost"
+DJANGO_SECRET=sua_chave_secreta
 ```
 
 Inicie a pasta estatica

@@ -10,6 +10,7 @@ __pycache__/
 
 # Banco SQLite (caso exista)
 db.sqlite3
+dados_de_jogo.db
 
 # Arquivos de ambiente
 .env
