@@ -56,60 +56,72 @@ function atualizarSlider(valor) {
 
 function configurarTamanhoTabuleiro(numPares) {
     let cols = 6;
-    let size = 100;
-    let fontSize = 45;
 
     if (numPares === 2) {
         cols = 2;
-        size = 150;
-        fontSize = 65;
     } else if (numPares === 3) {
         cols = 3;
-        size = 140;
-        fontSize = 60;
     } else if (numPares === 4) {
         cols = 4;
-        size = 130;
-        fontSize = 55;
-    } else if (numPares <= 6) {
-        cols = 4;
-        size = 115;
-        fontSize = 50;
-    } else if (numPares <= 8) {
-        cols = 4;
-        size = 105;
-        fontSize = 45;
-    } else if (numPares <= 10) {
+    } else if (numPares === 5) {
         cols = 5;
-        size = 95;
-        fontSize = 40;
-    } else if (numPares <= 12) {
+    } else if (numPares === 6) {
+        cols = 4;
+    } else if (numPares === 7) {
+        cols = 5;
+    } else if (numPares === 8) {
+        cols = 4;
+    } else if (numPares === 9) {
         cols = 6;
-        size = 90;
-        fontSize = 38;
+    } else if (numPares === 10) {
+        cols = 5;
     } else {
         cols = 6;
-        size = 82;
-        fontSize = 35;
     }
 
-    // Ajuste responsivo caso a tela seja menor
-    const larguraDisponivel = window.innerWidth - 40;
     if (window.innerWidth <= 600) {
         cols = Math.min(cols, numPares === 2 ? 2 : numPares === 3 ? 3 : 4);
     } else if (window.innerWidth <= 900) {
         cols = Math.min(cols, 5);
     }
 
-    const gap = window.innerWidth <= 600 ? 10 : 15;
-    const maxCardWidth = Math.floor((larguraDisponivel - (cols - 1) * gap) / cols);
-    if (maxCardWidth < size) {
-        size = Math.max(55, maxCardWidth);
-        fontSize = Math.max(24, Math.round(size * 0.44));
-    }
+    // Espaço disponível entre as barras laterais e abaixo do cabeçalho
+    const larguraDisponivel = Math.max(
+        260,
+        window.innerWidth > 900 ? window.innerWidth - 520 : window.innerWidth - 40
+    );
+    const alturaDisponivel = Math.max(260, window.innerHeight - 108);
+
+    const totalCartas = numPares * 2;
+    const rows = Math.ceil(totalCartas / cols);
+    const gap = window.innerWidth <= 600 ? 10 : 16;
+
+    // Progresso de 0 (2 pares) até 1 (15 pares):
+    // O tabuleiro ocupa de 58% a 92% da largura útil e de 55% a 85% da altura útil
+    const progresso = (numPares - 2) / 13;
+    const fatorLargura = 0.58 + progresso * 0.34;
+    const fatorAltura = 0.55 + progresso * 0.30;
+
+    const larguraAlvo = larguraDisponivel * fatorLargura;
+    const alturaAlvo = alturaDisponivel * fatorAltura;
+
+    const cardWidth = Math.max(
+        60,
+        Math.floor((larguraAlvo - (cols - 1) * gap) / cols)
+    );
+    const cardHeight = Math.max(
+        60,
+        Math.floor((alturaAlvo - (rows - 1) * gap) / rows)
+    );
+    const fontSize = Math.max(
+        26,
+        Math.floor(Math.min(cardWidth, cardHeight) * 0.48)
+    );
 
     board.style.setProperty("--grid-cols", cols);
-    board.style.setProperty("--card-size", `${size}px`);
+    board.style.setProperty("--grid-gap", `${gap}px`);
+    board.style.setProperty("--card-width", `${cardWidth}px`);
+    board.style.setProperty("--card-height", `${cardHeight}px`);
     board.style.setProperty("--card-font-size", `${fontSize}px`);
 }
 
@@ -133,7 +145,7 @@ function prepararTelaJogo() {
     // Tabuleiro inicia vazio até definir a dificuldade
     board.innerHTML = "";
 
-    game.style.display = "block";
+    game.style.display = "flex";
     win.style.display = "none";
 
     const slider = document.getElementById("slider-pares");

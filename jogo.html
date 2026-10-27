@@ -12,16 +12,27 @@
 
 <body>
 
-    <div id="game">
-        <div class="top">
-            <span id="player"></span>
-            <span>Tempo: <span id="t">00:00</span></span>
-            <span>Pontos: <span id="p">0</span></span>
-            <span>Mov.: <span id="m">0</span></span>
-            <button id="btn-sair" class="btn-sair" onclick="confirmarSaida()">🚪 Sair</button>
-        </div>
+    <header class="topo-institucional">
+        <img
+            src="{% static 'logo.png' %}"
+            alt="Secretaria de Educação"
+            class="logo-educacao"
+        >
+    </header>
 
-        <div id="board"></div>
+    <div id="game">
+        <aside id="painel-esquerdo" class="top">
+            <h2>📊 Partida</h2>
+            <div class="item-contador" id="player"></div>
+            <div class="item-contador">⏱️ Tempo: <span id="t">00:00</span></div>
+            <div class="item-contador">⭐ Pontos: <span id="p">0</span></div>
+            <div class="item-contador">🔄 Mov.: <span id="m">0</span></div>
+            <button id="btn-sair" class="btn-sair" onclick="confirmarSaida()">🚪 Sair</button>
+        </aside>
+
+        <main class="area-tabuleiro">
+            <div id="board"></div>
+        </main>
     </div>
 
     <div id="win" style="display:none">
