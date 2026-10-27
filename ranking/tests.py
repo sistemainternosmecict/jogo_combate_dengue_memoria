@@ -8,12 +8,19 @@ class JogoViewsAndRankingTest(TestCase):
     def test_index_page_renders(self):
         response = self.client.get(reverse("index"))
         self.assertEqual(response.status_code, 200)
+        self.assertContains(response, 'class="topo-institucional"')
+        self.assertContains(response, 'logo.png')
         self.assertContains(response, 'id="name"')
         self.assertContains(response, 'onclick="jogar()"')
 
     def test_jogo_page_renders_with_difficulty_and_exit_modals(self):
         response = self.client.get(reverse("jogo"))
         self.assertEqual(response.status_code, 200)
+        self.assertContains(response, 'class="topo-institucional"')
+        self.assertContains(response, 'logo.png')
+        self.assertContains(response, 'id="painel-esquerdo"')
+        self.assertContains(response, 'class="area-tabuleiro"')
+        self.assertContains(response, 'id="ranking"')
         self.assertContains(response, 'id="modal-dificuldade"')
         self.assertContains(response, 'id="slider-pares"')
         self.assertContains(response, 'min="2"')
